@@ -84,12 +84,15 @@
 <script>
 import { formatBytes } from "./util";
 
+//import IMEX from "@/services/IMEX";
+
 const imageMimeTypes = ["image/png", "image/jpeg"];
 
 export default {
     props: {
         path: String,
         storage: String,
+        storages:Array,
         endpoint: Object,
         files: { type: Array, default: () => [] },
         icons: Object,
@@ -102,14 +105,17 @@ export default {
             loading: false,
             uploading: false,
             progress: 0,
-            listItems: []
+            listItems: [],
+            response:null,
         };
     },
     methods: {
         formatBytes,
 
         async filesMap(files) {
+            //console.log('File', files)
             let promises = Array.from(files).map(file => {
+                //console.log('Files',file)
                 let result = {
                     name: file.name,
                     type: file.type,
@@ -117,14 +123,18 @@ export default {
                     extension: file.name.split(".").pop()
                 };
                 return new Promise(resolve => {
+                    //var file_data=''
                     if (!imageMimeTypes.includes(result.type)) {
                         return resolve(result);
                     }
                     var reader = new FileReader();
                     reader.onload = function(e) {
+                        //console.log('reader File preview:',reader.result)
+                        //console.log('reader File targe:',e.target)
                         result.preview = e.target.result;
                         resolve(result);
                     };
+                    //reader.readAsText(file);
                     reader.readAsDataURL(file);
                 });
             });
@@ -151,15 +161,28 @@ export default {
         cancel() {
             this.$emit("cancel");
         },
-
         async upload() {
-            let formData = new FormData();
-
-            // files
+           
+            let formdata =  new FormData();
+            //console.log('uploadfiles', this.listItems)
+            //let form =  {}
             for (let file of this.files) {
-                formData.append("files", file, file.name);
-            }
+                //console.log('Upload tes:',file)
+                const regex = /(.js|.json|.zip|.tar.gz|.tar|.py|.jpeg|.conf|)$/gi;
+                let m;
+                if(file.name.indexOf("cloud__") > -1 || file.name.indexOf("__cloud_") > -1 )return this.s4.handlerError({statusText:"File can't be imported"});
+                if ((m = regex.exec(file.name)) !== null) {
+                    m.forEach((match) => {
+                        if(!match) return this.s4.handlerError({statusText: this.$t("File not allowed;")});
+                        formdata.append("files",file);
+                        //form['files']=file
+                        
+                    });
+                    } 
 
+            }
+            console.log('formUpload:',this.storage+this.path)
+            //console.log('formUpload:',Object.fromEntries(form))//formData
             let url = this.endpoint.url
                 .replace(new RegExp("{storage}", "g"), this.storage)
                 .replace(new RegExp("{path}", "g"), this.path);
@@ -167,17 +190,26 @@ export default {
             let config = {
                 url,
                 method: this.endpoint.method || "post",
-                data: formData,
+                //data: {folder:this.path,content: form.files},
+                data:formdata,
                 onUploadProgress: progressEvent => {
                     this.progress =
                         (progressEvent.loaded / progressEvent.total) * 100;
                 }
             };
-
-            this.uploading = true;
-            let response = await this.axios.request(config);
-            this.uploading = false;
-            this.$emit("uploaded");
+            //console.log(config)
+            try {
+                this.uploading = true;
+                this.response = await this.axios.request(config);
+                this.uploading = false;
+                this.$emit("uploaded");
+                
+            } catch (error) {
+                console.warn(error)
+                this.uploading = false;
+                this.$emit("uploaded");
+                
+            }
         }
     },
     watch: {

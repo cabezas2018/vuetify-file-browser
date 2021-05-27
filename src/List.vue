@@ -26,7 +26,7 @@
                     </v-list-item-content>
                     <v-list-item-action>
                         <v-btn icon @click.stop="deleteItem(item)">
-                            <v-icon color="grey lighten-1">mdi-delete-outline</v-icon>
+                            <v-icon color="red lighten-5">mdi-delete-outline</v-icon>
                         </v-btn>
                         <v-btn icon v-if="false">
                             <v-icon color="grey lighten-1">mdi-information</v-icon>
@@ -36,7 +36,9 @@
             </v-list>
             <v-divider v-if="dirs.length && files.length"></v-divider>
             <v-list subheader v-if="files.length">
-                <v-subheader>Files</v-subheader>
+                <v-subheader>{{$t("Files")}}
+                    <v-chip small outlined>{{files.length}}</v-chip>
+                </v-subheader>
                 <v-list-item
                     v-for="item in files"
                     :key="item.basename"
@@ -54,7 +56,15 @@
 
                     <v-list-item-action>
                         <v-btn icon @click.stop="deleteItem(item)">
-                            <v-icon color="grey lighten-1">mdi-delete-outline</v-icon>
+                            <v-icon color="red lighten-5">mdi-delete-outline</v-icon>
+                        </v-btn>
+                        <v-btn icon v-if="false">
+                            <v-icon color="grey lighten-1">mdi-information</v-icon>
+                        </v-btn>
+                    </v-list-item-action>
+                    <v-list-item-action>
+                        <v-btn icon @click.stop="downloadItem(item)">
+                            <v-icon color="primary lighten-5">mdi-cloud-download-outline</v-icon>
                         </v-btn>
                         <v-btn icon v-if="false">
                             <v-icon color="grey lighten-1">mdi-information</v-icon>
@@ -73,7 +83,7 @@
         >The folder is empty</v-card-text>
         <v-divider v-if="path"></v-divider>
         <v-toolbar v-if="false && path && isFile" dense flat class="shrink">
-            <v-btn icon>
+            <v-btn icon >
                 <v-icon>mdi-download</v-icon>
             </v-btn>
         </v-toolbar>
@@ -90,7 +100,7 @@
             <v-btn icon v-if="false">
                 <v-icon>mdi-eye-settings-outline</v-icon>
             </v-btn>
-            <v-btn icon @click="load">
+            <v-btn   icon @click="load">
                 <v-icon>mdi-refresh</v-icon>
             </v-btn>
         </v-toolbar>
@@ -100,6 +110,7 @@
 <script>
 import { formatBytes } from "./util";
 import Confirm from "./Confirm.vue";
+import IMEX from "@/services/IMEX"
 
 export default {
     props: {
@@ -121,12 +132,20 @@ export default {
     },
     computed: {
         dirs() {
+             if(!this.items){
+                 console.warn('No files')
+                 return false
+             }
             return this.items.filter(
                 item =>
                     item.type === "dir" && item.basename.includes(this.filter)
             );
         },
         files() {
+             if(!this.items){
+                 console.warn('No files')
+                 return false
+             }
             return this.items.filter(
                 item =>
                     item.type === "file" && item.basename.includes(this.filter)
@@ -164,6 +183,7 @@ export default {
             this.$emit("loading", false);
         },
         async deleteItem(item) {
+            if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return this.s4.handlerError({statusText:"File can't be deleted"});
             let confirmed = await this.$refs.confirm.open(
                 "Delete",
                 `Are you sure<br>you want to delete this ${
@@ -186,6 +206,22 @@ export default {
                 this.$emit("file-deleted");
                 this.$emit("loading", false);
             }
+        },
+        async downloadItem(item){
+            if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return this.s4.handlerError({statusText:"File can't be download"});
+            //var item_file=item.basename.split('.')
+            //console.log('down',item_file[0],item_file[1])
+            let url = this.endpoints.download.url
+                    .replace(new RegExp("{storage}", "g"), this.storage)
+                    .replace(new RegExp("{path}", "g"), item.path);
+
+                let config = {
+                    url,
+                    method: this.endpoints.download.method || "get"
+                };
+                var content= await this.axios.request(config);
+                //console.log('download',item)
+                IMEX.export(content.data,item.name, item.extension);
         }
     },
     watch: {

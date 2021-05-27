@@ -45,6 +45,7 @@
             v-if="uploadingFiles !== false"
             :path="path"
             :storage="activeStorage"
+            :storages="storagesArray"
             :files="uploadingFiles"
             :icons="icons"
             :axios="axiosInstance"
@@ -87,10 +88,11 @@ const availableStorages = [
 ];
 
 const endpoints = {
-    list: { url: "/storage/{storage}/list?path={path}", method: "get" },
-    upload: { url: "/storage/{storage}/upload?path={path}", method: "post" },
-    mkdir: { url: "/storage/{storage}/mkdir?path={path}", method: "post" },
-    delete: { url: "/storage/{storage}/delete?path={path}", method: "post" }
+    list: { url: "/localstorage/{storage}/list?path={path}", method: "get" },
+    download: { url: "/localstorage/{storage}/download?path={path}", method: "get" },
+    upload: { url: "/localstorage/{storage}/upload?path={path}", method: "post" },
+    mkdir: { url: "/localstorage/{storage}/mkdir?path={path}", method: "post" },
+    delete: { url: "/localstorage/{storage}/delete?path={path}", method: "post" }
 };
 
 const fileIcons = {
@@ -156,11 +158,13 @@ export default {
             activeStorage: null,
             uploadingFiles: false, // or an Array of files
             refreshPending: false,
-            axiosInstance: null
+            axiosInstance: null,
+            dir:''
         };
     },
     computed: {
         storagesArray() {
+            //this.dir=storages
             let storageCodes = this.storages.split(","),
                 result = [];
             storageCodes.forEach(code => {

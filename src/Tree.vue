@@ -16,7 +16,7 @@
                 class="folders-tree"
             >
                 <template v-slot:prepend="{ item, open }">
-                    <v-icon
+                    <v-icon  :class="open ? 'primary--text lighten-5':'silver--text' "
                         v-if="item.type === 'dir'"
                     >{{ open ? 'mdi-folder-open-outline' : 'mdi-folder-outline' }}</v-icon>
                     <v-icon v-else>{{ icons[item.extension.toLowerCase()] || icons['other'] }}</v-icon>
@@ -79,16 +79,16 @@ export default {
         init() {
             this.open = [];
             this.items = [];
-            // set default files tree items (root item) in nextTick.
+            // set default files tree items (data item) in nextTick.
             // Otherwise this.open isn't cleared properly (due to syncing perhaps)
             setTimeout(() => {
                 this.items = [
                     {
                         type: "dir",
                         path: "/",
-                        basename: "root",
+                        basename: "data",
                         extension: "",
-                        name: "root",
+                        name: "data",
                         children: []
                     }
                 ];
@@ -107,18 +107,33 @@ export default {
                 url,
                 method: this.endpoints.list.method || "get"
             };
-
-            let response = await this.axios.request(config);
-
-            // eslint-disable-next-line require-atomic-updates
-            item.children = response.data.map(item => {
-                if (item.type === "dir") {
-                    item.children = [];
-                }
-                return item;
-            });
-
-            this.$emit("loading", false);
+            try {
+                let response = await this.axios.request(config);
+                // eslint-disable-next-line require-atomic-updates
+                item.children = response.data.map(item => {
+                    if (item.type === "dir") {
+                        item.children = [];
+                    }
+                    return item;
+                });
+    
+                this.$emit("loading", false);         
+            } catch (error) {
+                console.warn("not files",error)
+                this.open = [];
+                this.items = [
+                    {
+                        type: "dir",
+                        path: "/",
+                        basename: "data",
+                        extension: "",
+                        name: "data",
+                        children: []
+                    }
+                ];
+                this.$emit("loading", false); 
+                
+            }
         },
         activeChanged(active) {
             this.active = active;

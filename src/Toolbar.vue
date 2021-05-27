@@ -44,14 +44,15 @@
                         <v-icon>mdi-arrow-up-bold-outline</v-icon>
                     </v-btn>
                 </template>
-                <span v-if="pathSegments.length === 1">Up to "root"</span>
+                <span v-if="pathSegments.length === 1">Up to "data"</span>
                 <span v-else>Up to "{{pathSegments[pathSegments.length - 2].name}}"</span>
             </v-tooltip>
-            <v-menu
+            <!--<v-menu
                 v-model="newFolderPopper"
                 :close-on-content-click="false"
                 :nudge-width="200"
                 offset-y
+                
             >
                 <template v-slot:activator="{ on }">
                     <v-btn v-if="path" icon v-on="on" title="Create Folder">
@@ -73,7 +74,12 @@
                         >Create Folder</v-btn>
                     </v-card-actions>
                 </v-card>
-            </v-menu>
+            </v-menu>-->
+            <!--<div ref="inputUpload">
+                <v-btn color="primary" v-if="path" icon title="Upload test" @click="upfile">
+                    <v-icon>mdi-plus-circle</v-icon>
+                </v-btn>
+            </div>-->
             <v-btn v-if="path" icon @click="$refs.inputUpload.click()" title="Upload Files">
                 <v-icon>mdi-plus-circle</v-icon>
                 <input v-show="false" ref="inputUpload" type="file" multiple @change="addFiles" />
@@ -83,6 +89,7 @@
 </template>
 
 <script>
+import IMEX from "@/services/IMEX";
 export default {
     props: {
         storages: Array,
@@ -136,7 +143,14 @@ export default {
                         : segments[segments.length - 2].path;
             this.changePath(path);
         },
+        async upfile(){
+            var upload = await IMEX.import();
+            console.log('upfile imex',upload);
+            this.$emit("add-files", upload);
+
+        },
         async addFiles(event) {
+            console.log('upload event',event.target.files)
             this.$emit("add-files", event.target.files);
             this.$refs.inputUpload.value = "";
         },
