@@ -1,86 +1,89 @@
 <template>
     <v-card flat tile min-height="380" class="d-flex flex-column">
         <confirm ref="confirm"></confirm>
-        <v-card-text
-            v-if="!path"
-            class="grow d-flex justify-center align-center grey--text"
-        >Select a folder or a file</v-card-text>
-        <v-card-text
-            v-else-if="isFile"
-            class="grow d-flex justify-center align-center"
-        >File: {{ path }}</v-card-text>
-        <v-card-text v-else-if="dirs.length || files.length" class="grow">
-            <v-list subheader v-if="dirs.length">
-                <v-subheader>Folders</v-subheader>
-                <v-list-item
-                    v-for="item in dirs"
-                    :key="item.basename"
-                    @click="changePath(item.path)"
-                    class="pl-0"
-                >
-                    <v-list-item-avatar class="ma-0">
-                        <v-icon>mdi-folder-outline</v-icon>
-                    </v-list-item-avatar>
-                    <v-list-item-content class="py-2">
-                        <v-list-item-title v-text="item.basename"></v-list-item-title>
-                    </v-list-item-content>
-                    <v-list-item-action>
-                        <v-btn icon @click.stop="deleteItem(item)">
-                            <v-icon color="red lighten-5">mdi-delete-outline</v-icon>
-                        </v-btn>
-                        <v-btn icon v-if="false">
-                            <v-icon color="grey lighten-1">mdi-information</v-icon>
-                        </v-btn>
-                    </v-list-item-action>
-                </v-list-item>
-            </v-list>
-            <v-divider v-if="dirs.length && files.length"></v-divider>
-            <v-list subheader v-if="files.length">
-                <v-subheader>{{$t("Files")}}
-                    <v-chip small outlined>{{files.length}}</v-chip>
-                </v-subheader>
-                <v-list-item
-                    v-for="item in files"
-                    :key="item.basename"
-                    @click="changePath(item.path)"
-                    class="pl-0"
-                >
-                    <v-list-item-avatar class="ma-0">
-                        <v-icon>{{ icons[item.extension.toLowerCase()] || icons['other'] }}</v-icon>
-                    </v-list-item-avatar>
+        <div class="grow overflow-y-auto" >
+            <v-card-text
+                v-if="!path"
+                class="grow d-flex justify-center align-center grey--text"
+            >Select a folder or a file</v-card-text>
+            <v-card-text
+                v-else-if="isFile"
+                class="grow d-flex justify-center align-center"
+            >File: {{ path }}</v-card-text>
+            <v-card-text v-else-if="dirs.length || files.length" class="grow">
+                <v-list subheader v-if="dirs.length">
+                    <v-subheader>Folders</v-subheader>
+                    <v-list-item
+                        v-for="item in dirs"
+                        :key="item.basename"
+                        @click="changePath(item.path)"
+                        class="pl-0"
+                    >
+                        <v-list-item-avatar class="ma-0">
+                            <v-icon>mdi-folder-outline</v-icon>
+                        </v-list-item-avatar>
+                        <v-list-item-content class="py-2">
+                            <v-list-item-title v-text="item.basename"></v-list-item-title>
+                        </v-list-item-content>
+                        <v-list-item-action>
+                            <v-btn icon @click.stop="deleteItem(item)">
+                                <v-icon color="red lighten-5">mdi-delete-outline</v-icon>
+                            </v-btn>
+                            <v-btn icon v-if="false">
+                                <v-icon color="grey lighten-1">mdi-information</v-icon>
+                            </v-btn>
+                        </v-list-item-action>
+                    </v-list-item>
+                </v-list>
+                <v-divider v-if="dirs.length && files.length"></v-divider>
+                <v-list subheader v-if="files.length">
+                    <v-subheader>{{$t("Files")}}
+                        <v-chip small outlined>{{files.length}}</v-chip>
+                    </v-subheader>
+                    <v-list-item
+                        v-for="item in files"
+                        :key="item.basename"
+                        @click="changePath(item.path)"
+                        class="pl-0"
+                    >
+                        <v-list-item-avatar class="ma-0">
+                            <v-icon>{{ icons[item.extension.toLowerCase()] || icons['other'] }}</v-icon>
+                        </v-list-item-avatar>
 
-                    <v-list-item-content class="py-2">
-                        <v-list-item-title v-text="item.basename"></v-list-item-title>
-                        <v-list-item-subtitle>{{ formatBytes(item.size) }}</v-list-item-subtitle>
-                    </v-list-item-content>
+                        <v-list-item-content class="py-2">
+                            <v-list-item-title v-text="item.basename"></v-list-item-title>
+                            <v-list-item-subtitle>{{ formatBytes(item.size) }}</v-list-item-subtitle>
+                        </v-list-item-content>
 
-                    <v-list-item-action>
-                        <v-btn icon @click.stop="deleteItem(item)">
-                            <v-icon color="red lighten-5">mdi-delete-outline</v-icon>
-                        </v-btn>
-                        <v-btn icon v-if="false">
-                            <v-icon color="grey lighten-1">mdi-information</v-icon>
-                        </v-btn>
-                    </v-list-item-action>
-                    <v-list-item-action>
-                        <v-btn icon @click.stop="downloadItem(item)">
-                            <v-icon color="primary lighten-5">mdi-cloud-download-outline</v-icon>
-                        </v-btn>
-                        <v-btn icon v-if="false">
-                            <v-icon color="grey lighten-1">mdi-information</v-icon>
-                        </v-btn>
-                    </v-list-item-action>
-                </v-list-item>
-            </v-list>
-        </v-card-text>
-        <v-card-text
-            v-else-if="filter"
-            class="grow d-flex justify-center align-center grey--text py-5"
-        >No files or folders found</v-card-text>
-        <v-card-text
-            v-else
-            class="grow d-flex justify-center align-center grey--text py-5"
-        >The folder is empty</v-card-text>
+                        <v-list-item-action>
+                            <v-btn icon @click.stop="deleteItem(item)">
+                                <v-icon color="red lighten-5">mdi-delete-outline</v-icon>
+                            </v-btn>
+                            <v-btn icon v-if="false">
+                                <v-icon color="grey lighten-1">mdi-information</v-icon>
+                            </v-btn>
+                        </v-list-item-action>
+                        <v-list-item-action>
+                            <v-btn icon @click.stop="downloadItem(item)">
+                                <v-icon color="primary lighten-5">mdi-cloud-download-outline</v-icon>
+                            </v-btn>
+                            <v-btn icon v-if="false">
+                                <v-icon color="grey lighten-1">mdi-information</v-icon>
+                            </v-btn>
+                        </v-list-item-action>
+                    </v-list-item>
+                </v-list>
+            </v-card-text>
+            <v-card-text
+                v-else-if="filter"
+                class="grow d-flex justify-center align-center grey--text py-5"
+            >No files or folders found</v-card-text>
+            <v-card-text
+                v-else
+                class="grow d-flex justify-center align-center grey--text py-5"
+            >The folder is empty</v-card-text>
+
+        </div>
         <v-divider v-if="path"></v-divider>
         <v-toolbar v-if="false && path && isFile" dense flat class="shrink">
             <v-btn icon >
@@ -208,6 +211,8 @@ export default {
                     
                 } catch (error) {
                     console.warn(error);
+                    
+                    this.$emit("loading", false);
                     this.s4.handlerError({statusText: this.$t("File not deleted...")}); 
                 }
             }
@@ -231,6 +236,7 @@ export default {
                 } catch (error) {
                     console.warn(error);
                     this.s4.handlerError({statusText: this.$t("File not download...")});
+                    this.$emit("loading", false);
                 }
         }
     },

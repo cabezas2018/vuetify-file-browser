@@ -1,6 +1,6 @@
 <template>
     <v-card flat tile width="250" min-height="380" class="d-flex flex-column folders-tree-card">
-        <div class="grow scroll-x">
+        <div id="scrolling-techniques" class="grow scroll-x overflow-y-auto">
             <v-treeview
                 :open="open"
                 :active="active"
