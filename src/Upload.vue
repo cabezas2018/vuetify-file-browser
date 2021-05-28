@@ -170,7 +170,7 @@ export default {
                 //console.log('Upload tes:',file)
                 const regex = /(.js|.json|.zip|.tar.gz|.tar|.py|.jpeg|.conf|)$/gi;
                 let m;
-                if(file.name.indexOf("cloud__") > -1 || file.name.indexOf("__cloud_") > -1 )return this.s4.handlerError({statusText:"File can't be imported"});
+                if(file.name.indexOf("cloud__") > -1 || file.name.indexOf("__cloud_") > -1 || file.name.indexOf(" ") > -1 )return this.s4.handlerError({statusText:"File can't be imported"});
                 if ((m = regex.exec(file.name)) !== null) {
                     m.forEach((match) => {
                         if(!match) return this.s4.handlerError({statusText: this.$t("File not allowed;")});
