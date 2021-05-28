@@ -205,6 +205,7 @@ export default {
                 this.$emit("uploaded");
                 
             } catch (error) {
+                this.s4.handlerError({statusText: this.$t(error.response.data.message),});
                 console.warn(error)
                 this.uploading = false;
                 this.$emit("uploaded");

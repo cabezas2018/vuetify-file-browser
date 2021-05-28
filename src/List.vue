@@ -201,10 +201,15 @@ export default {
                     url,
                     method: this.endpoints.delete.method || "post"
                 };
-
-                await this.axios.request(config);
-                this.$emit("file-deleted");
-                this.$emit("loading", false);
+                try {
+                    await this.axios.request(config);
+                    this.$emit("file-deleted");
+                    this.$emit("loading", false);
+                    
+                } catch (error) {
+                    console.warn(error);
+                    this.s4.handlerError({statusText: this.$t("File not deleted...")}); 
+                }
             }
         },
         async downloadItem(item){
@@ -219,9 +224,14 @@ export default {
                     url,
                     method: this.endpoints.download.method || "get"
                 };
-                var content= await this.axios.request(config);
-                //console.log('download',item)
-                IMEX.export(content.data,item.name, item.extension);
+                try {
+                    var content= await this.axios.request(config);
+                    IMEX.export(content.data,item.name, item.extension);
+                    
+                } catch (error) {
+                    console.warn(error);
+                    this.s4.handlerError({statusText: this.$t("File not download...")});
+                }
         }
     },
     watch: {

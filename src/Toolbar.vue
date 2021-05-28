@@ -75,11 +75,6 @@
                     </v-card-actions>
                 </v-card>
             </v-menu>-->
-            <!--<div ref="inputUpload">
-                <v-btn color="primary" v-if="path" icon title="Upload test" @click="upfile">
-                    <v-icon>mdi-plus-circle</v-icon>
-                </v-btn>
-            </div>-->
             <v-btn v-if="path" icon @click="$refs.inputUpload.click()" title="Upload Files">
                 <v-icon>mdi-plus-circle</v-icon>
                 <input v-show="false" ref="inputUpload" type="file" multiple @change="addFiles" />
@@ -89,7 +84,7 @@
 </template>
 
 <script>
-import IMEX from "@/services/IMEX";
+
 export default {
     props: {
         storages: Array,
@@ -143,12 +138,6 @@ export default {
                         : segments[segments.length - 2].path;
             this.changePath(path);
         },
-        async upfile(){
-            var upload = await IMEX.import();
-            console.log('upfile imex',upload);
-            this.$emit("add-files", upload);
-
-        },
         async addFiles(event) {
             console.log('upload event',event.target.files)
             this.$emit("add-files", event.target.files);
@@ -164,12 +153,19 @@ export default {
                 url,
                 method: this.endpoints.mkdir.method || "post"
             };
-
-            await this.axios.request(config);
-            this.$emit("folder-created", this.newFolderName);
-            this.newFolderPopper = false;
-            this.newFolderName = "";
-            this.$emit("loading", false);
+            try {
+                await this.axios.request(config);
+                this.$emit("folder-created", this.newFolderName);
+                this.newFolderPopper = false;
+                this.newFolderName = "";
+                this.$emit("loading", false);
+            } catch (error) {
+                this.newFolderPopper = false;
+                this.newFolderName = "";
+                this.$emit("loading", false);
+                console.warn(error);
+                this.s4.handlerError({statusText: this.$t("Can't create folder")}); 
+            }
         }
     }
 };
