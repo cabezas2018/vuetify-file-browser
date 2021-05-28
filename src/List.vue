@@ -1,7 +1,7 @@
 <template>
     <v-card flat tile min-height="380" class="d-flex flex-column">
         <confirm ref="confirm"></confirm>
-        <div class="grow overflow-y-auto" >
+        <div style="height: 400px" class="grow overflow-y-auto" >
             <v-card-text
                 v-if="!path"
                 class="grow d-flex justify-center align-center grey--text"
