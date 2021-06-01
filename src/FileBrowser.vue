@@ -58,6 +58,7 @@
             v-on:cancel="uploadingFiles = false"
             v-on:uploaded="uploaded"
         ></upload>
+         
     </v-card>
 </template>
 
@@ -158,8 +159,7 @@ export default {
             activeStorage: null,
             uploadingFiles: false, // or an Array of files
             refreshPending: false,
-            axiosInstance: null,
-            dir:''
+            axiosInstance: null
         };
     },
     computed: {

@@ -164,7 +164,6 @@ export default {
                 this.newFolderName = "";
                 this.$emit("loading", false);
                 console.warn(error);
-                this.s4.handlerError({statusText: this.$t("Can't create folder")}); 
             }
         }
     }

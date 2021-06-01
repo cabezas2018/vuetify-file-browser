@@ -1,7 +1,6 @@
 <template>
     <v-card flat tile min-height="380" class="d-flex flex-column">
         <confirm ref="confirm"></confirm>
-        <div style="height: 750px" class="grow overflow-y-auto" >
             <v-card-text
                 v-if="!path"
                 class="grow d-flex justify-center align-center grey--text"
@@ -83,7 +82,7 @@
                 class="grow d-flex justify-center align-center grey--text py-5"
             >The folder is empty</v-card-text>
 
-        </div>
+       
         <v-divider v-if="path"></v-divider>
         <v-toolbar v-if="false && path && isFile" dense flat class="shrink">
             <v-btn icon >
@@ -113,8 +112,6 @@
 <script>
 import { formatBytes } from "./util";
 import Confirm from "./Confirm.vue";
-import IMEX from "@/services/IMEX"
-
 export default {
     props: {
         icons: Object,
@@ -186,7 +183,7 @@ export default {
             this.$emit("loading", false);
         },
         async deleteItem(item) {
-            if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return this.s4.handlerError({statusText:"File can't be deleted"});
+            if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return 
             let confirmed = await this.$refs.confirm.open(
                 "Delete",
                 `Are you sure<br>you want to delete this ${
@@ -211,14 +208,22 @@ export default {
                     
                 } catch (error) {
                     console.warn(error);
-                    
                     this.$emit("loading", false);
-                    this.s4.handlerError({statusText: this.$t("File not deleted...")}); 
+                    
                 }
             }
         },
+        export(data, filename, ext = "xlsx") {
+            var element = document.createElement("a");
+            element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
+            element.setAttribute("download", filename  + "." + ext);
+            element.style.display = "none";
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        },
         async downloadItem(item){
-            if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return this.s4.handlerError({statusText:"File can't be download"});
+            if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return 
             //var item_file=item.basename.split('.')
             //console.log('down',item_file[0],item_file[1])
             let url = this.endpoints.download.url
@@ -231,11 +236,9 @@ export default {
                 };
                 try {
                     var content= await this.axios.request(config);
-                    IMEX.export(content.data,item.name, item.extension);
-                    
+                    this.export(content.data,item.name, item.extension);
                 } catch (error) {
                     console.warn(error);
-                    this.s4.handlerError({statusText: this.$t("File not download...")});
                     this.$emit("loading", false);
                 }
         }

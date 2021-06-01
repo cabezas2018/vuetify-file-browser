@@ -83,11 +83,7 @@
 
 <script>
 import { formatBytes } from "./util";
-
-//import IMEX from "@/services/IMEX";
-
 const imageMimeTypes = ["image/png", "image/jpeg"];
-
 export default {
     props: {
         path: String,
@@ -170,10 +166,10 @@ export default {
                 //console.log('Upload tes:',file)
                 const regex = /(.js|.json|.zip|.tar.gz|.tar|.py|.jpeg|.conf|)$/gi;
                 let m;
-                if(file.name.indexOf("cloud__") > -1 || file.name.indexOf("__cloud_") > -1 || file.name.indexOf(" ") > -1 )return this.s4.handlerError({statusText:"File can't be imported"});
+                if(file.name.indexOf("cloud__") > -1 || file.name.indexOf("__cloud_") > -1 || file.name.indexOf(" ") > -1 )return 
                 if ((m = regex.exec(file.name)) !== null) {
                     m.forEach((match) => {
-                        if(!match) return this.s4.handlerError({statusText: this.$t("File not allowed;")});
+                        if(!match) return 
                         formdata.append("files",file);
                         //form['files']=file
                         
@@ -205,7 +201,6 @@ export default {
                 this.$emit("uploaded");
                 
             } catch (error) {
-                this.s4.handlerError({statusText: this.$t(error.response.data.message),});
                 console.warn(error)
                 this.uploading = false;
                 this.$emit("uploaded");
