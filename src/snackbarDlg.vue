@@ -47,7 +47,7 @@ export default {
             this.resolve(false);
             this.snackbar = false;
         },
-        toast(message = "", type = "success",  position  =  "right") {
+        toast(message = "", type = "success") {
             //console.log("toast", message, "type:"+type,"position:"+position);
             this.snackbar = true;
             this.options.color =
@@ -58,9 +58,9 @@ export default {
                 : type == "warning"
                 ? "orange"
                 : "cyan";
-            this.options.position.right   =   position == "right" ? true:false 
-            this.options.position.left =  position == "left" ? true:false
-            this.options.position.centered = position == "centered" ? true:false
+            // this.options.position.right   =   position == "right" ? true:false 
+            // this.options.position.left =  position == "left" ? true:false
+            // this.options.position.centered = position == "centered" ? true:false
             //console.log(this.options.position)
             this.options.messageText = message;
             return new Promise((resolve, reject) => {

@@ -1,6 +1,7 @@
 <template>
     <v-card flat tile min-height="380" class="d-flex flex-column">
         <confirm ref="confirm"></confirm>
+        <snackbar ref="snackbar"></snackbar>
             <v-card-text
                 v-if="!path"
                 class="grow d-flex justify-center align-center grey--text"
@@ -112,6 +113,7 @@
 <script>
 import { formatBytes } from "./util";
 import Confirm from "./Confirm.vue";
+import Snackbar from "./snackbarDlg.vue"
 export default {
     props: {
         icons: Object,
@@ -122,7 +124,8 @@ export default {
         refreshPending: Boolean
     },
     components: {
-        Confirm
+        Confirm,
+        Snackbar
     },
     data() {
         return {
@@ -205,10 +208,12 @@ export default {
                     await this.axios.request(config);
                     this.$emit("file-deleted");
                     this.$emit("loading", false);
+                    await this.$refs.snackbar.toast('File deleted','success');
                     
                 } catch (error) {
                     console.warn(error);
                     this.$emit("loading", false);
+                    await this.$refs.snackbar.toast('Not file deleted','error');
                     
                 }
             }
@@ -221,6 +226,7 @@ export default {
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
+            this.$refs.snackbar.toast('Download file','success');
         },
         async downloadItem(item){
             if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return 
