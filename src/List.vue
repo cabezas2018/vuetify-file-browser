@@ -198,7 +198,7 @@ export default {
                 this.$emit("loading", true);
                 let url = this.endpoints.delete.url
                     .replace(new RegExp("{storage}", "g"), this.storage)
-                    .replace(new RegExp("{path}", "g"), item.path);
+                    .replace(new RegExp("{path}", "g"), `'${item.path}'`);
 
                 let config = {
                     url,
@@ -234,7 +234,7 @@ export default {
             //console.log('down',item_file[0],item_file[1])
             let url = this.endpoints.download.url
                     .replace(new RegExp("{storage}", "g"), this.storage)
-                    .replace(new RegExp("{path}", "g"), item.path);
+                    .replace(new RegExp("{path}", "g"), `'${item.path}'`);
 
                 let config = {
                     url,
