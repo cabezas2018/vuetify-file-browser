@@ -208,7 +208,7 @@ export default {
                     await this.axios.request(config);
                     this.$emit("file-deleted");
                     this.$emit("loading", false);
-                    await this.$refs.snackbar.toast('File deleted','success');
+                    //await this.$refs.snackbar.toast('File deleted','success');
                     
                 } catch (error) {
                     console.warn(error);
@@ -226,7 +226,7 @@ export default {
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
-            this.$refs.snackbar.toast('Download file','success');
+            //this.$refs.snackbar.toast('Download file','success');
         },
         async downloadItem(item){
             if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return 

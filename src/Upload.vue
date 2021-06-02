@@ -201,7 +201,7 @@ export default {
                 this.response = await this.axios.request(config);
                 this.uploading = false;
                 this.$emit("uploaded");
-                await this.$refs.snackbar.toast('File uploaded','success');
+                //await this.$refs.snackbar.toast('File uploaded','success');
                 
             } catch (error) {
                 console.warn(error)
