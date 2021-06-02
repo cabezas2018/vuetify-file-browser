@@ -270,6 +270,6 @@ export default {
 }
 .scroll-y {
         overflow-y: auto;
-        max-height:770px
+        height:400px
     }
 </style>
