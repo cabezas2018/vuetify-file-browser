@@ -194,7 +194,7 @@ export default {
     }
     .scroll-y {
         overflow-y: auto;
-        height:400px
+        height:770px
     }
 
     ::v-deep .folders-tree {
