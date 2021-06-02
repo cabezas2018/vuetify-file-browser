@@ -1,6 +1,6 @@
 <template>
-    <v-card flat tile  min-height="380" class="d-flex flex-column folders-tree-card">
-        <div class="grow scroll-x">
+    <v-card flat tile width="250" min-height="380" class="d-flex flex-column folders-tree-card">
+        <div class="grow scroll-x scroll-y">
             <v-treeview
                 :open="open"
                 :active="active"
@@ -191,6 +191,10 @@ export default {
 
     .scroll-x {
         overflow-x: auto;
+    }
+    .scroll-y {
+        overflow-y: auto;
+        height:400px
     }
 
     ::v-deep .folders-tree {

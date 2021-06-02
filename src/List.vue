@@ -10,7 +10,7 @@
                 v-else-if="isFile"
                 class="grow d-flex justify-center align-center"
             >File: {{ path }}</v-card-text>
-            <v-card-text v-else-if="dirs.length || files.length" class="grow">
+            <v-card-text v-else-if="dirs.length || files.length" class="grow scroll-y">
                 <v-list subheader v-if="dirs.length">
                     <v-subheader>Folders</v-subheader>
                     <v-list-item
@@ -268,4 +268,8 @@ export default {
 .v-card {
     height: 100%;
 }
+.scroll-y {
+        overflow-y: auto;
+        height:400px
+    }
 </style>
