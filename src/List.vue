@@ -186,7 +186,7 @@ export default {
             this.$emit("loading", false);
         },
         async deleteItem(item) {
-            if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return 
+            if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return this.$emit("text-message", true,'Not file deleted','error');
             let confirmed = await this.$refs.confirm.open(
                 "Delete",
                 `Are you sure<br>you want to delete this ${
@@ -231,7 +231,7 @@ export default {
             
         },
         async downloadItem(item){
-            if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return 
+            if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return this.$emit("text-message", true,'Not Donwload','error');
             //var item_file=item.basename.split('.')
             //console.log('down',item_file[0],item_file[1])
             let url = this.endpoints.download.url

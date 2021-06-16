@@ -10,7 +10,7 @@
             v-on:path-changed="pathChanged"
             v-on:add-files="addUploadingFiles"
             v-on:folder-created="refreshPending = true"
-            v-on:text-message="getMessage"
+            
         ></toolbar>
         <v-row no-gutters>
             <v-col v-if="tree && $vuetify.breakpoint.smAndUp" sm="auto">
@@ -24,7 +24,7 @@
                     v-on:path-changed="pathChanged"
                     v-on:loading="loadingChanged"
                     v-on:refreshed="refreshPending = false"
-                    v-on:text-message="getMessage"
+                    
                 ></tree>
             </v-col>
             <v-divider v-if="tree" vertical></v-divider>
@@ -182,7 +182,7 @@ export default {
             refreshPending: false,
             axiosInstance: null,
             snackbar: false,
-            messageText: null,
+            //messageText: null,
             options: {
                 color: "green",
                 width: 300,
@@ -204,7 +204,7 @@ export default {
     },
     methods: {
         getMessage(open=false, message = "", type = "success"){
-            console.log("Message",open,message,type)
+            console.log("Message",open,message,type);
             this.snackbar = open;
             this.options.color =
             type == "error"
@@ -215,6 +215,7 @@ export default {
                 ? "orange"
                 : "cyan";
             this.options.messageText = message;
+            return this.options
         },
         loadingChanged(loading) {
             if (loading) {
