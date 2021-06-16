@@ -208,13 +208,13 @@ export default {
                     await this.axios.request(config);
                     this.$emit("file-deleted");
                     this.$emit("loading", false);
-                    this.$emit("open-message", true,'File deleted','success');
+                    this.$emit("text-message", true,'File deleted','success');
                    
                     
                 } catch (error) {
                     console.warn(error);
                     this.$emit("loading", false);
-                    this.$emit("open-message", true,'Not file deleted','error');
+                    this.$emit("text-message", true,'Not file deleted','error');
                     
                     
                 }

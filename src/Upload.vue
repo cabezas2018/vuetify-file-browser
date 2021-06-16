@@ -200,14 +200,13 @@ export default {
                 this.response = await this.axios.request(config);
                 this.uploading = false;
                 this.$emit("uploaded");
-                this.$emit("open-message", true,'File uploaded','success');
+                this.$emit("text-message", true,'File uploaded','success');
                 
             } catch (error) {
                 console.warn(error)
                 this.uploading = false;
                 this.$emit("uploaded");
-                
-                this.$emit("open-message", true,'Not file uploaded','error');
+                this.$emit("text-message", true,'Not file uploaded','error');
                 
             }
         }

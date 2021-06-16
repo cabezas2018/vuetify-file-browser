@@ -10,7 +10,7 @@
             v-on:path-changed="pathChanged"
             v-on:add-files="addUploadingFiles"
             v-on:folder-created="refreshPending = true"
-            v-on:open-message="getMessage"
+            v-on:text-message="getMessage"
         ></toolbar>
         <v-row no-gutters>
             <v-col v-if="tree && $vuetify.breakpoint.smAndUp" sm="auto">
@@ -24,7 +24,7 @@
                     v-on:path-changed="pathChanged"
                     v-on:loading="loadingChanged"
                     v-on:refreshed="refreshPending = false"
-                    v-on:open-message="getMessage"
+                    v-on:text-message="getMessage"
                 ></tree>
             </v-col>
             <v-divider v-if="tree" vertical></v-divider>
@@ -40,7 +40,7 @@
                     v-on:loading="loadingChanged"
                     v-on:refreshed="refreshPending = false"
                     v-on:file-deleted="refreshPending = true"
-                    v-on:open-message="getMessage"
+                    v-on:text-message="getMessage"
                 ></list>
             </v-col>
         </v-row>
@@ -60,7 +60,7 @@
             v-on:clear-files="uploadingFiles = []"
             v-on:cancel="uploadingFiles = false"
             v-on:uploaded="uploaded"
-            v-on:open-message="getMessage"
+            v-on:text-message="getMessage"
         ></upload>
         <div>
             <v-snackbar
