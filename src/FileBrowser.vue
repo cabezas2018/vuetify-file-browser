@@ -40,7 +40,7 @@
                     v-on:loading="loadingChanged"
                     v-on:refreshed="refreshPending = false"
                     v-on:file-deleted="refreshPending = true"
-                    v-on:text-message="getMessage"
+                    v-on:text-message="Text_Message"
                 ></list>
             </v-col>
         </v-row>
@@ -60,7 +60,7 @@
             v-on:clear-files="uploadingFiles = []"
             v-on:cancel="uploadingFiles = false"
             v-on:uploaded="uploaded"
-            v-on:text-message="getMessage"
+            v-on:text-message="Text_Message"
         ></upload>
         <div>
             <v-snackbar
@@ -183,6 +183,11 @@ export default {
             axiosInstance: null,
             snackbar: false,
             //messageText: null,
+            message_text: {
+                state:false,
+                message:"",
+                type:"success"
+            },
             options: {
                 color: "green",
                 width: 300,
@@ -216,6 +221,12 @@ export default {
                 : "cyan";
             this.options.messageText = message;
             return this.options
+        },
+        Text_Message(state=false, message = "", type = "success"){
+            this.message_text.state=state;
+            this.message_text.message=message;
+            this.message_text.type=type
+            this.$emit("test-message",this.message_text)
         },
         loadingChanged(loading) {
             if (loading) {
