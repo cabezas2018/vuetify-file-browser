@@ -204,6 +204,7 @@ export default {
     },
     methods: {
         getMessage(open=false, message = "", type = "success"){
+            console.log("Message",open,message,type)
             this.snackbar = open;
             this.options.color =
             type == "error"
