@@ -80,15 +80,14 @@
                 <input v-show="false" ref="inputUpload" type="file" multiple @change="addFiles" />
             </v-btn>
         </template>
-      <Snackbar ref="dlg_snackbar" /> 
     </v-toolbar>
 </template>
 
 <script>
-import Snackbar from "./snackbarDlg"
+
 export default {
-    //components:{Snackbar: () => import("./snackbarDlg.vue")},
-    components:{Snackbar},
+   
+    
     props: {
         storages: Array,
         storage: String,

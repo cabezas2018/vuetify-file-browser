@@ -10,6 +10,7 @@
             v-on:path-changed="pathChanged"
             v-on:add-files="addUploadingFiles"
             v-on:folder-created="refreshPending = true"
+            v-on:open-message="getMessage"
         ></toolbar>
         <v-row no-gutters>
             <v-col v-if="tree && $vuetify.breakpoint.smAndUp" sm="auto">
@@ -23,6 +24,7 @@
                     v-on:path-changed="pathChanged"
                     v-on:loading="loadingChanged"
                     v-on:refreshed="refreshPending = false"
+                    v-on:open-message="getMessage"
                 ></tree>
             </v-col>
             <v-divider v-if="tree" vertical></v-divider>
@@ -38,6 +40,7 @@
                     v-on:loading="loadingChanged"
                     v-on:refreshed="refreshPending = false"
                     v-on:file-deleted="refreshPending = true"
+                    v-on:open-message="getMessage"
                 ></list>
             </v-col>
         </v-row>
@@ -57,7 +60,25 @@
             v-on:clear-files="uploadingFiles = []"
             v-on:cancel="uploadingFiles = false"
             v-on:uploaded="uploaded"
+            v-on:open-message="getMessage"
         ></upload>
+        <div>
+            <v-snackbar
+                v-model="snackbar"
+                :timeout="3000"
+                fixed
+                top
+                :color="options.color"
+                class="text-left"
+                >
+                <span class="body-2">{{ options.messageText }}</span>
+                <template v-slot:action="{ attrs }">
+                    <v-icon v-bind="attrs" right color="white"
+                    >{{ options.color == "green" ? "mdi-check" : "mdi-alert-circle" }}
+                    </v-icon>
+                </template>
+            </v-snackbar>
+        </div>
          
     </v-card>
 </template>
@@ -159,7 +180,15 @@ export default {
             activeStorage: null,
             uploadingFiles: false, // or an Array of files
             refreshPending: false,
-            axiosInstance: null
+            axiosInstance: null,
+            snackbar: false,
+            messageText: null,
+            options: {
+                color: "green",
+                width: 300,
+                position:"right",
+                messageText:""
+            }
         };
     },
     computed: {
@@ -174,6 +203,18 @@ export default {
         }
     },
     methods: {
+        getMessage(open=false, message = "", type = "success"){
+            this.snackbar = open;
+            this.options.color =
+            type == "error"
+                ? "red"
+                : type == "success"
+                ? "green"
+                : type == "warning"
+                ? "orange"
+                : "cyan";
+            this.options.messageText = message;
+        },
         loadingChanged(loading) {
             if (loading) {
                 this.loading++;

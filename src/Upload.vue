@@ -1,6 +1,5 @@
 <template>
     <v-overlay :absolute="true">
-        <snackbar ref="snackbar"></snackbar>
         <v-card flat light class="mx-auto" :loading="loading">
             <v-card-text class="py-3 text-center">
                 <div>
@@ -86,7 +85,7 @@
 import { formatBytes } from "./util";
 const imageMimeTypes = ["image/png", "image/jpeg"];
 export default {
-    components:{Snackbar: () => import("./snackbarDlg.vue")},
+   
     props: {
         path: String,
         storage: String,
@@ -201,13 +200,14 @@ export default {
                 this.response = await this.axios.request(config);
                 this.uploading = false;
                 this.$emit("uploaded");
-                //await this.$refs.snackbar.toast('File uploaded','success');
+                this.$emit("open-message", true,'File uploaded','success');
                 
             } catch (error) {
                 console.warn(error)
                 this.uploading = false;
                 this.$emit("uploaded");
-                await this.$refs.snackbar.toast('Not file uploaded','error');
+                
+                this.$emit("open-message", true,'Not file uploaded','error');
                 
             }
         }
