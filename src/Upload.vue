@@ -167,7 +167,7 @@ export default {
                 //console.log('Upload tes:',file)
                 const regex = /(.js|.json|.zip|.tar.gz|.tar|.py|.jpeg|.conf|)$/gi;
                 let m;
-                if(file.name.indexOf("cloud__") > -1 || file.name.indexOf("__cloud_") > -1 || file.name.indexOf(" ") > -1 )return 
+                if(file.name.indexOf("cloud__") > -1 || file.name.indexOf("__cloud_") > -1 || file.name.indexOf(" ") > -1 )return this.$emit("text-message", true,'file not allowed','error');
                 if ((m = regex.exec(file.name)) !== null) {
                     m.forEach((match) => {
                         if(!match) return 
