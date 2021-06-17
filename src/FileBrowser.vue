@@ -132,6 +132,7 @@ const fileIcons = {
     jar:"mdi-language-java",
     ts:"mdi-language-typescript",
     md: "mdi-markdown",
+    apk:"android",
     pdf: "mdi-file-pdf",
     png: "mdi-file-image",
     jpg: "mdi-file-image",
@@ -143,6 +144,11 @@ const fileIcons = {
     mov: "mdi-filmstrip",
     txt: "mdi-file-document-outline",
     xls: "mdi-file-excel",
+    pptx:"mdi-microsoft-powerpoint",
+    pptx:"mdi-microsoft-powerpoint",
+    accdb:"mdi-microsoft-access",
+    docx:"mdi-microsoft-word",
+    doc:"mdi-microsoft-word",
     other: "mdi-file-outline"
 };
 
