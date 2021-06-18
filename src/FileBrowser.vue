@@ -120,6 +120,7 @@ const endpoints = {
 const fileIcons = {
     zip: "mdi-folder-zip-outline",
     rar: "mdi-folder-zip-outline",
+    gz: "mdi-folder-zip-outline",
     htm: "mdi-language-html5",
     html: "mdi-language-html5",
     js: "mdi-nodejs",
