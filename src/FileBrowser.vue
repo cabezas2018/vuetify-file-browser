@@ -98,10 +98,15 @@ const availableStorages = [
         icon: "mdi-folder-multiple-outline"
     },
     {
+        name: "Media SDK",
+        code: "media",
+        icon: "mdi-folder-star-multiple-outline"
+    }
+    /*{
         name: "Amazon S3",
         code: "s3",
         icon: "mdi-amazon-drive"
-    }
+    }*/
     /*{
         name: "Dropbox",
         code: "dropbox",

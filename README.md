@@ -12,7 +12,8 @@ Open source file manager component for Vue.js. Requires Vuetify v2.0 or higher.
 
 **Storages:**
 - [x] Local Filesystem;
-- [x] Amazon S3;
+- [x] Media SDK;
+- [] Amazon S3;
 - [ ] Dropbox;
 - [ ] Google Drive;
 
@@ -30,7 +31,11 @@ npm i vuetify-file-browser
 
 ```html
 <template>
-    <file-browser :axiosConfig="{baseURL: 'http://localhost:8081'}" />
+    <file-browser :axiosConfig="{baseURL: 'http://localhost:8081'}" 
+        :storages="'local'" 
+        v-on:test-message="GetDataMessage" 
+    
+    />
 </template>
 
 <script>
@@ -39,7 +44,12 @@ import FileBrowser from "vuetify-file-browser";
 export default {
     components: {
         FileBrowser
-    }
+    },
+    methods: {
+    GetDataMessage(status){
+      console.log("Messages File browser",status)
+    },
+  }
 };
 </script>
 ```
