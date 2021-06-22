@@ -41,11 +41,11 @@
             <v-tooltip bottom v-if="pathSegments.length > 0">
                 <template v-slot:activator="{ on }">
                     <v-btn icon @click="goUp" v-on="on">
-                        <v-icon>mdi-arrow-up-bold-outline</v-icon>
+                        <v-icon>mdi-arrow-u-left-top-bold</v-icon>
                     </v-btn>
                 </template>
-                <span v-if="pathSegments.length === 1">Up to "data"</span>
-                <span v-else>Up to "{{pathSegments[pathSegments.length - 2].name}}"</span>
+                <span v-if="pathSegments.length === 1">Back to "data"</span>
+                <span v-else>Back to "{{pathSegments[pathSegments.length - 2].name}}"</span>
             </v-tooltip>
             <!--<v-menu
                 v-model="newFolderPopper"

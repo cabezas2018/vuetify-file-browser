@@ -46,9 +46,9 @@
                         @click="changePath(item.path)"
                         class="pl-0"
                     >
-                        <v-list-item-avatar class="ma-0">
+                        <v-list-item-icon class="ma-0">
                             <v-icon>{{ icons[item.extension.toLowerCase()] || icons['other'] }}</v-icon>
-                        </v-list-item-avatar>
+                        </v-list-item-icon>
 
                         <v-list-item-content class="py-2">
                             <v-list-item-title v-text="item.basename"></v-list-item-title>
@@ -57,7 +57,7 @@
 
                         <v-list-item-action>
                             <v-btn icon @click.stop="deleteItem(item)">
-                                <v-icon color="red lighten-5">mdi-delete-outline</v-icon>
+                                <v-icon color="red ">mdi-delete-outline</v-icon>
                             </v-btn>
                             <v-btn icon v-if="false">
                                 <v-icon color="grey lighten-1">mdi-information</v-icon>
@@ -65,7 +65,7 @@
                         </v-list-item-action>
                         <v-list-item-action>
                             <v-btn icon @click.stop="downloadItem(item)">
-                                <v-icon color="primary lighten-5">mdi-cloud-download-outline</v-icon>
+                                <v-icon color="#005596">mdi-cloud-download-outline</v-icon>
                             </v-btn>
                             <v-btn icon v-if="false">
                                 <v-icon color="grey lighten-1">mdi-information</v-icon>
