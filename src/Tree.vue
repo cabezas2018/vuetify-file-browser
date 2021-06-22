@@ -120,18 +120,13 @@ export default {
                 this.$emit("loading", false);         
             } catch (error) {
                 console.warn("not files",error)
-                this.open = [];
-                this.items = [
-                    {
-                        type: "dir",
-                        path: "/",
-                        basename: "data",
-                        extension: "",
-                        name: "data",
-                        children: []
-                    }
-                ];
-                this.$emit("loading", false); 
+                // var TextError=error.response.data.statusText.errorText.replace(/(\W|^)(ls|data|nls|)/g, " ")
+                // this.$emit("text-message", true,TextError);
+                this.init()
+                setTimeout(() => {
+                    return this.$emit("loading", false);  
+                }, 2000);
+                return  this.$emit("text-message", true,'No such file or directory','error');
                 
             }
         },

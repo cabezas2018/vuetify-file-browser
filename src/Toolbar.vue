@@ -41,7 +41,7 @@
             <v-tooltip bottom v-if="pathSegments.length > 0">
                 <template v-slot:activator="{ on }">
                     <v-btn icon @click="goUp" v-on="on">
-                        <v-icon>mdi-arrow-u-left-top-bold</v-icon>
+                        <v-icon>{{IconsToolbar.ArrowDownLeftBold}}</v-icon>
                     </v-btn>
                 </template>
                 <span v-if="pathSegments.length === 1">Back to "data"</span>
@@ -89,6 +89,7 @@ export default {
    
     
     props: {
+        IconsToolbar:Object,
         storages: Array,
         storage: String,
         path: String,
