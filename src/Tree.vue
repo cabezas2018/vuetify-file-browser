@@ -124,9 +124,9 @@ export default {
                 // this.$emit("text-message", true,TextError);
                 this.init()
                 setTimeout(() => {
-                    return this.$emit("loading", false);  
+                    this.$emit("loading", false);  
+                    this.$emit("text-message", true,'No such file or directory','error');
                 }, 2000);
-                return  this.$emit("text-message", true,'No such file or directory','error');
                 
             }
         },
@@ -137,7 +137,7 @@ export default {
                 path = active[0];
             }
             if (this.path != path) {
-                this.$emit("path-changed", path);
+                this.$emit("path-changed", `${path}`);
             }
         },
         findItem(path) {

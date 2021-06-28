@@ -25,6 +25,7 @@
                     v-on:path-changed="pathChanged"
                     v-on:loading="loadingChanged"
                     v-on:refreshed="refreshPending = false"
+                    v-on:text-message="Text_Message"
                     
                 ></tree>
             </v-col>

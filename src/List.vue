@@ -222,13 +222,21 @@ export default {
         },
         export(data, filename, ext = "xlsx") {
             var element = document.createElement("a");
-            element.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(data));
-            element.setAttribute("download", filename  + "." + ext);
+            element.setAttribute("href", href + encodeURIComponent(data));
+            element.setAttribute("download", filename , ext);
             element.style.display = "none";
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
             
+        },
+        download(data, filename, type = "text/plain"){
+            const blob = new Blob([data], { type: type })
+            const link = document.createElement('a')
+            link.href = URL.createObjectURL(blob)
+            link.download = filename
+            link.click()
+            URL.revokeObjectURL(link.href)
         },
         async downloadItem(item){
             if(item.basename.indexOf("cloud__") > -1 || item.basename.indexOf("__cloud_") > -1 )return this.$emit("text-message", true,'Not Donwload','error');
@@ -243,8 +251,10 @@ export default {
                     method: this.endpoints.download.method || "get"
                 };
                 try {
+                    //var href= item.extension=="mp4"? "data:video/mp4":"data:text/plain;charset=utf-8,"
                     var content= await this.axios.request(config);
-                    this.export(content.data,item.name, item.extension);
+                    //this.export(content.data,item.name, item.extension);
+                    this.download(content.data,item.name)
                 } catch (error) {
                     console.warn(error);
                     this.$emit("loading", false);
