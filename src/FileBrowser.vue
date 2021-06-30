@@ -118,7 +118,8 @@ const availableStorages = [
 
 const endpoints = {
     list: { url: "/localstorage/{storage}/list?path={path}", method: "get" },
-    download: { url: "/localstorage/{storage}/download?path={path}", method: "get" },
+    //download: { url: "/localstorage/{storage}/download?path={path}", method: "get" },
+    download:{ url: "/localstorage/{storage}{path}", method: "get" },
     upload: { url: "/localstorage/{storage}/upload?path={path}", method: "post" },
     mkdir: { url: "/localstorage/{storage}/mkdir?path={path}", method: "post" },
     delete: { url: "/localstorage/{storage}/delete?path={path}", method: "post" }

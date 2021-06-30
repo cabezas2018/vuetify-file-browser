@@ -220,16 +220,7 @@ export default {
                 }
             }
         },
-        export(data, filename, ext = "xlsx") {
-            var element = document.createElement("a");
-            element.setAttribute("href", href + encodeURIComponent(data));
-            element.setAttribute("download", filename , ext);
-            element.style.display = "none";
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-            
-        },
+       
         download(data, filename, type = "text/plain"){
             const blob = new Blob([data], { type: type })
             const link = document.createElement('a')
@@ -247,14 +238,25 @@ export default {
                     .replace(new RegExp("{path}", "g"), `'${item.path}'`);
 
                 let config = {
+                    params:{extension:item.extension},
+                    responseType: 'blob',
                     url,
                     method: this.endpoints.download.method || "get"
                 };
                 try {
                     //var href= item.extension=="mp4"? "data:video/mp4":"data:text/plain;charset=utf-8,"
                     var content= await this.axios.request(config);
-                    //this.export(content.data,item.name, item.extension);
-                    this.download(content.data,item.name)
+                    
+                    var type="text/plain"
+                    if(item.extension=="mp4"){
+                        type="video/mp4"
+                        this.download(content_b64,item.name,type)
+                    }if (item.extension=="jpeg"){
+                        type="image/jpeg"
+                        this.download(content_b64,item.name,type)
+                    }else {
+                        this.download(content.data,item.name,type)   
+                    }
                 } catch (error) {
                     console.warn(error);
                     this.$emit("loading", false);
