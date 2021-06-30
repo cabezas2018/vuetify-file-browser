@@ -235,7 +235,7 @@ export default {
             //console.log('down',item_file[0],item_file[1])
             let url = this.endpoints.download.url
                     .replace(new RegExp("{storage}", "g"), this.storage)
-                    .replace(new RegExp("{path}", "g"), `'${item.path}'`);
+                    .replace(new RegExp("{path}", "g"), item.path);
 
                 let config = {
                     params:{extension:item.extension},
@@ -250,10 +250,10 @@ export default {
                     var type="text/plain"
                     if(item.extension=="mp4"){
                         type="video/mp4"
-                        this.download(content_b64,item.name,type)
+                        this.download(content.data,item.name,type)
                     }if (item.extension=="jpeg"){
                         type="image/jpeg"
-                        this.download(content_b64,item.name,type)
+                        this.download(content.data,item.name,type)
                     }else {
                         this.download(content.data,item.name,type)   
                     }
